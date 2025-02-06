@@ -3,17 +3,33 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 
+import { ai } from './routes/ai';
+import { editor } from './routes/editor';
+
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// API Endpoints
+app.use("/api/editor", editor);
+app.use("/api/ai", ai);
+
 // Serve static files (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, '../public')));
+const BASE_PATH = path.join(__dirname, '../public');
+app.use(express.static(BASE_PATH));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(BASE_PATH, 'index.html'));
+});
+app.get('/editor', (req, res) => {
+  res.sendFile(path.join(BASE_PATH, 'editor.html'));
+});
+
+// Handle 404
+app.get('*', (req, res) => {
+  res.sendFile(path.join(BASE_PATH, '404.html'));
 });
 
 const PORT = process.env.PORT || 3000;
