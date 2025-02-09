@@ -3,17 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./styles.css" />
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>GenTable - AI Powered Database Visual Schema Designer</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Heroicons -->
+    <script src="https://cdn.jsdelivr.net/npm/heroicons-css@0.1.1/heroicons.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/heroicons-css@0.1.1/heroicons.min.css"
+      rel="stylesheet"
+    />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tailwind Configs -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon" />
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-accent: var(--color-purple-500);
+      }
+    </style>
   </head>
-  <body
-    class="flex flex-col items-center justify-center min-h-screen bg-gray-200"
-  >
-    <h1 class="text-4xl font-bold text-blue-600">
-      GenTable - AI Powered Database Visual Schema Designer
-    </h1>
-    <p class="mt-4 text-gray-700">Styled with Tailwind</p>
+  <body class="flex w-full max-w-[100vw] min-h-screen">
+    <aside class="w-80 flex flex-col h-screen gap-y-6 bg-accent shadow-2xl">
+      <div class="flex items-center p-3 gap-x-3">
+        <div class="bg-white rounded-xl p-1 w-max">
+          <img class="size-12" src="./assets/logo.png" alt="" />
+        </div>
+        <div class="flex items-center flex-1 justify-end">
+          <button
+            class="size-10 justify-center text-sm text-accent items-center inline-flex rounded-xl bg-white"
+          >
+            <span class="heroicon heroicon-plus text-3xl"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tables -->
+      <div class="flex-1 flex flex-col gap-6">
+        <div class="overflow-hidden pb-1 px-1 bg-white mx-2 rounded-lg">
+          <input
+            class="p-3 w-full text-center text-accent font-medium tracking-wide"
+            value="Hello"
+          />
+          <div
+            class="grid px-3 py-1 divide-y divide-purple-400 bg-accent gap-y-1 text-white rounded"
+          >
+            <div class="flex items-center">
+              <span class="text-sm py-3">id</span>
+              <span class=""></span>
+            </div>
+            <div class="flex items-center">
+              <span class="text-sm py-3">name</span>
+              <span class=""></span>
+            </div>
+            <div class="flex items-center">
+              <span class="text-sm py-3">fields</span>
+              <span class=""></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="space-y-3 p-3">
+        <button
+          class="inline-flex w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 px-4 bg-white text-slate-900 hover:bg-slate-200"
+        >
+          Copy SQL Query
+          <img class="h-5 w-5" src="./assets/sql.png" alt="" />
+        </button>
+        <button
+          class="inline-flex w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 px-4 bg-white text-slate-900 hover:bg-slate-200"
+        >
+          Copy Prisma Schema
+          <img class="h-5 w-5" src="./assets/prisma.png" alt="" />
+        </button>
+      </div>
+    </aside>
+    <div class="flex-1 bg-neutral-100 flex items-center justify-center relative h-screen overflow-hidden">
+      <div id="canvas" class="bg-white relative w-max cursor-grab active:cursor-grabbing">
+        <svg
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        version="1.1"
+        id="v-5"
+        width="3833.6323852539062"
+        height="1911.1189270019531"
+        x="-916.8162231445312"
+        y="-455.5594787597656"
+      >
+        <defs id="v-4">
+          <pattern
+            id="pattern_view2_0"
+            patternUnits="userSpaceOnUse"
+            width="10"
+            height="10"
+            x="916.8162231445312"
+            y="455.5594787597656"
+          >
+            <rect id="v-6" width="1" height="1" fill="#AAAAAA"></rect>
+          </pattern>
+        </defs>
+        <rect
+          id="v-8"
+          width="100%"
+          height="100%"
+          fill="url(#pattern_view2_0)"
+        ></rect>
+      </svg>
+        
+      </div>
+
+      <!-- Controls -->
+      <div
+        class="absolute h-12 gap-x-3 bottom-5 text-neutral-500 right-5 flex overflow-hidden items-center shadow-lg rounded-xl border border-neutral-300"
+      >
+        <div
+          id="zoomIncrement"
+          class="border-r cursor-pointer hover:bg-neutral-200 border-neutral-300 h-full flex items-center justify-center px-3"
+        >
+          <span class="heroicon heroicon-plus-circle text-xl"></span>
+        </div>
+        <div class="flex-1">
+          <div class="inline-flex items-center text-xl font-medium">
+            <input
+              class="w-10 text-end"
+              id="zoomInput"
+              type="number"
+              min="50"
+              max="200"
+              value="100"
+            />
+            <span class="text-base font-semibold">%</span>
+          </div>
+        </div>
+        <div
+          id="zoomDecrement"
+          class="border-l cursor-pointer hover:bg-neutral-200 border-neutral-300 h-full flex items-center justify-center px-3"
+        >
+          <span class="heroicon heroicon-minus-circle text-xl"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./scripts/editor.js"></script>
   </body>
 </html>
