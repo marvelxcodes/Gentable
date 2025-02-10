@@ -1,8 +1,7 @@
-import { updateTransform, returnInRange } from './util.js'
+import { CanvasTableCard, SidebarTableCard } from './elements.js';
+import { updateTransform, returnInRange } from './util.js';
 /*
     Schema:
-
-    Values: (boolean | number | string | enum)
 
     Table: {
         id: string
@@ -15,8 +14,8 @@ import { updateTransform, returnInRange } from './util.js'
     Field: {
         id: string
         name: string
+        value: (boolean | number | string | enum)
         type: ( Relation | Values )
-        value: Values
         relation?: {
             table: string
             field: string
@@ -28,6 +27,7 @@ let tables = [];
 
 const canvas = document.getElementById('canvas');
 const zoomInput = document.getElementById('zoomInput');
+const tablesContainer = document.getElementById('tablesContainer');
 const zoomIncrementButton = document.getElementById('zoomIncrement');
 const zoomDecrementButton = document.getElementById('zoomDecrement');
 
@@ -74,21 +74,37 @@ canvas.addEventListener('contextmenu', function (event) {
 let isPanning = false;
 let panStart = false;
 let panOffset = { x: 0, y: 0 };
-let selectedTableOffset = { x: 0, y: 0 };
+let draggedTableOffset = { x: 0, y: 0 };
+let draggedTable = null;
 
 canvas.addEventListener('mousedown', (e) => {
-  if (e.target.id !== 'canvasBG') {
-    console.log(e.target)
-  } else {
+  if (e.target.id === 'canvasBG') {
     isPanning = true;
     panStart = { x: e.clientX, y: e.clientY };
+  } else if (e.target.closest('.table-header')) {
+    const tableDiv = e.target.closest('.table');
+    draggedTable = tables.find((table) => table.id === tableDiv.id);
+
+    const scale = zoomInput.value / 100;
+    draggedTableOffset.x = ((e.clientX - panOffset.x) / scale - draggedTable.x);
+    draggedTableOffset.y = ((e.clientY - panOffset.y) / scale - draggedTable.y);
   }
 });
 
-canvas.addEventListener('mousemove', (e) => {
-  if (e.target.id !== 'canvasBG') {
-  } else if (isPanning) {
-    console.log(e.target.id);
+document.addEventListener('mousemove', (e) => {
+  if (draggedTable) {
+    const scale = zoomInput.value / 100;
+    draggedTable.x = (e.clientX - panOffset.x) / scale - draggedTableOffset.x;
+    draggedTable.y = (e.clientY - panOffset.y) / scale - draggedTableOffset.y;
+
+    const tableDiv = e.target.closest('.table');
+    if (tableDiv) {
+      updateTransform(tableDiv, {
+        translate: { x: draggedTable.x, y: draggedTable.y },
+      });
+    }
+  }
+  if (e.target.id === 'canvasBG' && isPanning) {
     const deltaX = e.clientX - panStart.x;
     const deltaY = e.clientY - panStart.y;
     panOffset.x += deltaX;
@@ -100,14 +116,37 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('mouseup', (e) => {
-  if(e.target.id !== 'canvasBG') {
-    
-  } else if (isPanning) {
+  draggedTable = null;
+  if (e.target.id === 'canvasBG' && isPanning) {
     isPanning = false;
   }
 });
 
-
 // Handles the creation of a new table
 const createTableButton = document.getElementById('createTableButton');
 
+createTableButton.addEventListener('click', () => {
+  const table = {
+    id: `table-${tables.length}`,
+    name: 'New Table',
+    x: 100,
+    y: 100,
+    fields: [
+      {
+        id: 'field-0',
+        name: 'id',
+        value: 'boolean',
+        type: 'Values',
+      },
+    ],
+  };
+
+  tables.push(table);
+
+  const sidebarTableCard = SidebarTableCard(table);
+  tablesContainer.appendChild(sidebarTableCard);
+
+  const canvasTableCard = CanvasTableCard(table);
+  canvas.appendChild(canvasTableCard);
+  createCanvasTable(table);
+});

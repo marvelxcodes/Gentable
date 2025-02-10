@@ -36,7 +36,12 @@
     <aside class="w-80 flex flex-col h-screen gap-y-6 bg-accent shadow-2xl">
       <div class="flex items-center p-3 gap-x-3">
         <div class="bg-white rounded-xl p-1 w-max">
-          <img class="size-12" src="./assets/logo.png" alt="" />
+          <img
+            class="size-12 select-none"
+            draggable="false"
+            src="./assets/logo.png"
+            alt=""
+          />
         </div>
         <div class="flex items-center flex-1 justify-end">
           <button
@@ -49,45 +54,8 @@
       </div>
 
       <!-- Tables -->
-      <div class="flex-1 flex flex-col gap-6">
-        <div class="overflow-hidden bg-white mx-2 rounded-lg">
-          <div class="border-b-1 bg-neutral-100 border-neutral-200">
-            <input
-              class="p-3 w-full text-center text-accent font-medium tracking-wide"
-              value="Hello"
-            />
-          </div>
-          <div
-            class="flex flex-col px-2 py-2 divide-purple-400 gap-y-1 text-white rounded"
-          >
-            <div class="grid grid-cols-2 text-sm items-center gap-x-2">
-              <div
-                class="bg-white rounded-sm p-2 border border-neutral-200 flex-1"
-              >
-                <input class="text-neutral-500" value="id" />
-              </div>
-              <div
-                class="bg-white rounded-sm p-2 border border-neutral-200 flex-1"
-              >
-                <input class="text-neutral-500" value="string" />
-              </div>
-            </div>
-          </div>
-          <div
-            class="flex px-2 gap-x-2 border-t py-2 bg-neutral-100 border-neutral-200"
-          >
-            <button
-              class="text-sm bg-white cursor-pointer hover:bg-neutral-200 border px-2 py-0.5 rounded-md shadow text-neutral-500 border-neutral-300 flex-1"
-            >
-              Delete Table
-            </button>
-            <button
-              class="text-sm bg-accent cursor-pointer hover:bg-purple-700 border px-2 py-0.5 rounded-md shadow text-white border-accent flex-1"
-            >
-              Add Column
-            </button>
-          </div>
-        </div>
+      <div id="tablesContainer" class="flex-1 flex flex-col gap-6 hide-scrollbar overflow-y-scroll">
+        
       </div>
 
       <!-- Actions -->
@@ -113,19 +81,6 @@
         id="canvas"
         class="bg-white relative w-max min-w-[300vw] min-h-[300vh] cursor-grab active:cursor-grabbing"
       >
-        <div
-          class="bg-white h-96 overflow-hidden shadow-xl w-80 flex flex-col rounded-lg z-30 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-        >
-          <div class="pt-2 bg-accent"></div>
-          <div
-            class="bg-neutral-100 select-none text-neutral-600 text-center border-b border-neutral-300 py-3 text-xl font-bold"
-          >
-            User
-          </div>
-          <div class="bg-white flex flex-1 cursor-default">
-            <div class="py-2"></div>
-          </div>
-        </div>
         <svg
           class="absolute h-full w-full top-0 left-0"
           xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -161,11 +116,12 @@
         class="absolute bg-white h-12 gap-x-3 bottom-5 text-neutral-500 right-5 flex overflow-hidden items-center shadow-lg rounded-xl border border-neutral-300"
       >
         <div
-          id="zoomIncrement"
+          id="zoomDecrement"
           class="border-r cursor-pointer hover:bg-neutral-200 border-neutral-300 h-full flex items-center justify-center px-3"
         >
-          <span class="heroicon heroicon-plus-circle text-xl"></span>
+          <span class="heroicon heroicon-minus-circle text-xl"></span>
         </div>
+
         <div class="flex-1">
           <div class="inline-flex items-center text-xl font-medium">
             <input
@@ -180,10 +136,10 @@
           </div>
         </div>
         <div
-          id="zoomDecrement"
+          id="zoomIncrement"
           class="border-l cursor-pointer hover:bg-neutral-200 border-neutral-300 h-full flex items-center justify-center px-3"
         >
-          <span class="heroicon heroicon-minus-circle text-xl"></span>
+          <span class="heroicon heroicon-plus-circle text-xl"></span>
         </div>
       </div>
     </div>
