@@ -40,7 +40,8 @@
         </div>
         <div class="flex items-center flex-1 justify-end">
           <button
-            class="size-10 justify-center text-sm text-accent items-center inline-flex rounded-xl bg-white"
+            id="createTableButton"
+            class="size-10 justify-center cursor-pointer text-sm text-accent items-center inline-flex rounded-xl bg-white"
           >
             <span class="heroicon heroicon-plus text-3xl"></span>
           </button>
@@ -49,32 +50,48 @@
 
       <!-- Tables -->
       <div class="flex-1 flex flex-col gap-6">
-        <div class="overflow-hidden pb-1 px-1 bg-white mx-2 rounded-lg">
-          <input
-            class="p-3 w-full text-center text-accent font-medium tracking-wide"
-            value="Hello"
-          />
+        <div class="overflow-hidden bg-white mx-2 rounded-lg">
+          <div class="border-b-1 bg-neutral-100 border-neutral-200">
+            <input
+              class="p-3 w-full text-center text-accent font-medium tracking-wide"
+              value="Hello"
+            />
+          </div>
           <div
-            class="grid px-3 py-1 divide-y divide-purple-400 bg-accent gap-y-1 text-white rounded"
+            class="flex flex-col px-2 py-2 divide-purple-400 gap-y-1 text-white rounded"
           >
-            <div class="flex items-center">
-              <span class="text-sm py-3">id</span>
-              <span class=""></span>
+            <div class="grid grid-cols-2 text-sm items-center gap-x-2">
+              <div
+                class="bg-white rounded-sm p-2 border border-neutral-200 flex-1"
+              >
+                <input class="text-neutral-500" value="id" />
+              </div>
+              <div
+                class="bg-white rounded-sm p-2 border border-neutral-200 flex-1"
+              >
+                <input class="text-neutral-500" value="string" />
+              </div>
             </div>
-            <div class="flex items-center">
-              <span class="text-sm py-3">name</span>
-              <span class=""></span>
-            </div>
-            <div class="flex items-center">
-              <span class="text-sm py-3">fields</span>
-              <span class=""></span>
-            </div>
+          </div>
+          <div
+            class="flex px-2 gap-x-2 border-t py-2 bg-neutral-100 border-neutral-200"
+          >
+            <button
+              class="text-sm bg-white cursor-pointer hover:bg-neutral-200 border px-2 py-0.5 rounded-md shadow text-neutral-500 border-neutral-300 flex-1"
+            >
+              Delete Table
+            </button>
+            <button
+              class="text-sm bg-accent cursor-pointer hover:bg-purple-700 border px-2 py-0.5 rounded-md shadow text-white border-accent flex-1"
+            >
+              Add Column
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Actions -->
-      <div class="space-y-3 p-3">
+      <div class="space-y-3 select-none p-3">
         <button
           class="inline-flex w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 px-4 bg-white text-slate-900 hover:bg-slate-200"
         >
@@ -89,42 +106,59 @@
         </button>
       </div>
     </aside>
-    <div class="flex-1 bg-neutral-100 flex items-center justify-center relative h-screen overflow-hidden">
-      <div id="canvas" class="bg-white relative w-max cursor-grab active:cursor-grabbing">
-        <svg
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        version="1.1"
-        id="v-5"
-        width="3833.6323852539062"
-        height="1911.1189270019531"
-        x="-916.8162231445312"
-        y="-455.5594787597656"
+    <div
+      class="flex-1 bg-neutral-100 flex items-center justify-center relative h-screen overflow-hidden"
+    >
+      <div
+        id="canvas"
+        class="bg-white relative w-max min-w-[300vw] min-h-[300vh] cursor-grab active:cursor-grabbing"
       >
-        <defs id="v-4">
-          <pattern
-            id="pattern_view2_0"
-            patternUnits="userSpaceOnUse"
-            width="10"
-            height="10"
-            x="916.8162231445312"
-            y="455.5594787597656"
+        <div
+          class="bg-white h-96 overflow-hidden shadow-xl w-80 flex flex-col rounded-lg z-30 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+        >
+          <div class="pt-2 bg-accent"></div>
+          <div
+            class="bg-neutral-100 select-none text-neutral-600 text-center border-b border-neutral-300 py-3 text-xl font-bold"
           >
-            <rect id="v-6" width="1" height="1" fill="#AAAAAA"></rect>
-          </pattern>
-        </defs>
-        <rect
-          id="v-8"
-          width="100%"
-          height="100%"
-          fill="url(#pattern_view2_0)"
-        ></rect>
-      </svg>
-        
+            User
+          </div>
+          <div class="bg-white flex flex-1 cursor-default">
+            <div class="py-2"></div>
+          </div>
+        </div>
+        <svg
+          class="absolute h-full w-full top-0 left-0"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          version="1.1"
+          width="3833.6323852539062"
+          height="1911.1189270019531"
+          x="-916.8162231445312"
+          y="-455.5594787597656"
+        >
+          <defs id="canvasBG">
+            <pattern
+              id="pattern_view2_0"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              x="916.8162231445312"
+              y="455.5594787597656"
+            >
+              <rect id="v-6" width="1" height="1" fill="#AAAAAA"></rect>
+            </pattern>
+          </defs>
+          <rect
+            id="canvasBG"
+            width="100%"
+            height="100%"
+            fill="url(#pattern_view2_0)"
+          ></rect>
+        </svg>
       </div>
 
       <!-- Controls -->
       <div
-        class="absolute h-12 gap-x-3 bottom-5 text-neutral-500 right-5 flex overflow-hidden items-center shadow-lg rounded-xl border border-neutral-300"
+        class="absolute bg-white h-12 gap-x-3 bottom-5 text-neutral-500 right-5 flex overflow-hidden items-center shadow-lg rounded-xl border border-neutral-300"
       >
         <div
           id="zoomIncrement"

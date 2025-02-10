@@ -1,8 +1,10 @@
 body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-family: 'Inter', sans-serif;
 }
 
-input, button {
+input {
   border: none;
   outline: none;
 }
