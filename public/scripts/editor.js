@@ -1,5 +1,6 @@
 import { CanvasTableCard, SidebarTableCard } from './elements.js';
 import { updateTransform, returnInRange } from './util.js';
+import tablesDefault from './data.js';
 /*
     Schema:
 
@@ -25,11 +26,30 @@ import { updateTransform, returnInRange } from './util.js';
 
 let tables = [];
 
+if (localStorage.getItem('tables')) {
+  tables = JSON.parse(localStorage.getItem('tables'));
+} else {
+  tables = tablesDefault;
+  localStorage.setItem('tables', JSON.stringify(tables));
+}
+
 const canvas = document.getElementById('canvas');
 const zoomInput = document.getElementById('zoomInput');
 const tablesContainer = document.getElementById('tablesContainer');
 const zoomIncrementButton = document.getElementById('zoomIncrement');
 const zoomDecrementButton = document.getElementById('zoomDecrement');
+
+function renderTables() {
+  tables.forEach((table) => {
+    const sidebarTableCard = SidebarTableCard(table);
+    tablesContainer.appendChild(sidebarTableCard);
+
+    const canvasTableCard = CanvasTableCard(table);
+    canvas.appendChild(canvasTableCard);
+  });
+}
+
+renderTables();
 
 // Handles zooming in and out of the canvas
 zoomInput.addEventListener('change', (event) => {
@@ -116,6 +136,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('mouseup', (e) => {
+  localStorage.setItem('tables', JSON.stringify(tables));
   draggedTable = null;
   if (e.target.id === 'canvasBG' && isPanning) {
     isPanning = false;
@@ -135,7 +156,7 @@ createTableButton.addEventListener('click', () => {
       {
         id: 'field-0',
         name: 'id',
-        value: 'boolean',
+        value: 'varchar',
         type: 'Values',
       },
     ],
@@ -148,5 +169,4 @@ createTableButton.addEventListener('click', () => {
 
   const canvasTableCard = CanvasTableCard(table);
   canvas.appendChild(canvasTableCard);
-  createCanvasTable(table);
 });
