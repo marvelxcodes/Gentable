@@ -5,7 +5,7 @@ import { tablesResponseSchema } from '../config/schema';
 export const ai = Router();
 
 ai.get('/', async (req: Request, res: Response) => {
-  const schema = req.query.schema as string;
+  const app_description = req.query.app_description as string;
 
   const model = gemini.getGenerativeModel({
     model: 'gemini-1.5-flash',
@@ -15,7 +15,7 @@ ai.get('/', async (req: Request, res: Response) => {
     },
   });
 
-  const prompt = `Generate a prisma schema for a database with tables and fields using the following JSON: ${JSON.stringify(schema)}`;
+  const prompt = `${app_description}. Generate a JSON schema for a database with tables and fields using the following format:`;
 
   const result = await model.generateContent(prompt);
 
@@ -30,6 +30,7 @@ ai.get('/', async (req: Request, res: Response) => {
     });
   }
 });
+
 
 ai.post('prisma', async (req: Request, res: Response) => {
   const schema = req.body.schema as string;
