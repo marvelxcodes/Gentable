@@ -23,3 +23,14 @@ input[type=number]::-webkit-inner-spin-button {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+textarea {
+  resize: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  outline: none;
+  padding: 1rem;
+}
+

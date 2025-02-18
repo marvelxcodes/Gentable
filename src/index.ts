@@ -1,12 +1,9 @@
 import path from 'path';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 
 import { ai } from './routes/ai';
 import { editor } from './routes/editor';
-
-dotenv.config();
 
 const app = express();
 app.use(cors());

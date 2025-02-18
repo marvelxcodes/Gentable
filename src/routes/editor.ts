@@ -2,7 +2,9 @@ import { Router } from "express";
 
 export const editor = Router();
 
-editor.get("/", (req, res) => {
-  const { id } = req.query;
-  res.sendFile("/src/routes/test.json");
+editor.post("/share", (req, res) => {
+  const { schema } = req.body;
+
+
+  res.json();
 });

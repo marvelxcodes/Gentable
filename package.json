@@ -13,8 +13,8 @@
   "author": "marvelxcodes",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
     "express": "^4.21.2"
   },
   "devDependencies": {
@@ -22,6 +22,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.1",
     "copy-webpack-plugin": "^12.0.2",
+    "dotenv": "^16.4.7",
     "nodemon": "^3.1.9",
     "postcss": "^8.5.1",
     "ts-loader": "^9.5.2",

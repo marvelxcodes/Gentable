@@ -97,7 +97,7 @@ let panOffset = { x: 0, y: 0 };
 let draggedTableOffset = { x: 0, y: 0 };
 let draggedTable = null;
 
-canvas.addEventListener('mousedown', (e) => {
+document.addEventListener('mousedown', (e) => {
   if (e.target.id === 'canvasBG') {
     isPanning = true;
     panStart = { x: e.clientX, y: e.clientY };
@@ -117,7 +117,7 @@ document.addEventListener('mousemove', (e) => {
     draggedTable.x = (e.clientX - panOffset.x) / scale - draggedTableOffset.x;
     draggedTable.y = (e.clientY - panOffset.y) / scale - draggedTableOffset.y;
 
-    const tableDiv = e.target.closest('.table');
+    const tableDiv = document.getElementById(draggedTable.id);
     if (tableDiv) {
       updateTransform(tableDiv, {
         translate: { x: draggedTable.x, y: draggedTable.y },
@@ -135,7 +135,7 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
-canvas.addEventListener('mouseup', (e) => {
+document.addEventListener('mouseup', (e) => {
   localStorage.setItem('tables', JSON.stringify(tables));
   draggedTable = null;
   if (e.target.id === 'canvasBG' && isPanning) {
@@ -145,10 +145,9 @@ canvas.addEventListener('mouseup', (e) => {
 
 // Handles the creation of a new table
 const createTableButton = document.getElementById('createTableButton');
-
 createTableButton.addEventListener('click', () => {
   const table = {
-    id: `table-${tables.length}`,
+    id: `table-${Math.random().toString(36).slice(2, 9)}`,
     name: 'New Table',
     x: 100,
     y: 100,
@@ -170,3 +169,31 @@ createTableButton.addEventListener('click', () => {
   const canvasTableCard = CanvasTableCard(table);
   canvas.appendChild(canvasTableCard);
 });
+
+
+
+export function addFieldToTable(tableId, field) {
+  const table = tables.find((t) => t.id === tableId);
+  if (table) {
+    table.fields.push(field);
+    localStorage.setItem('tables', JSON.stringify(tables));
+
+    const tableDiv = document.getElementById(tableId);
+    const innerPadding = tableDiv.querySelector('.py-2.flex-1.flex.flex-col');
+
+    const fieldElement = document.createElement('div');
+    fieldElement.className = 'flex items-center px-4 py-2';
+
+    const fieldLabel = document.createElement('span');
+    fieldLabel.className = 'text-neutral-600 flex-1';
+    fieldLabel.textContent = field.name;
+
+    const fieldValue = document.createElement('span');
+    fieldValue.className = 'text-neutral-600 flex-1 text-right';
+    fieldValue.textContent = field.value;
+
+    fieldElement.appendChild(fieldLabel);
+    fieldElement.appendChild(fieldValue);
+    innerPadding.appendChild(fieldElement);
+  }
+}

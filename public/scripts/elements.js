@@ -23,7 +23,7 @@ export function CanvasTableCard(table) {
 
   table.fields.forEach((field) => {
     const fieldElement = document.createElement('div');
-    fieldElement.className = 'flex items-center px-4 py-2';
+    fieldElement.className = 'field-element flex items-center px-4 py-2';
 
     const fieldLabel = document.createElement('span');
     fieldLabel.className = 'field-label text-neutral-600 flex-1';
@@ -47,6 +47,115 @@ export function CanvasTableCard(table) {
   return card;
 }
 
+export function SidebarTableCardRow(table, field, index) {
+  const row = document.createElement('div');
+  row.className = 'grid grid-cols-6 text-sm items-center gap-x-2';
+
+  const fieldContainer = document.createElement('div');
+  fieldContainer.className =
+    'bg-white rounded-sm col-span-3  p-2 border border-neutral-200';
+
+  const fieldNameInput = document.createElement('input');
+  fieldContainer.appendChild(fieldNameInput);
+  fieldNameInput.className = 'type-input text-neutral-500';
+  fieldNameInput.addEventListener('input', (event) => {
+    const tables = JSON.parse(localStorage.getItem('tables'));
+    localStorage.setItem(
+      'tables',
+      JSON.stringify(
+        tables.map((t) => {
+          if (t.id === table.id) {
+            t.fields = t.fields.map((f) => {
+              if (f.id === field.id) {
+                f.name = event.target.value;
+              }
+              return f;
+            });
+          }
+          return t;
+        }),
+      ),
+    );
+
+    console.log(document.getElementById(table.id).querySelectorAll('.field-label'));
+    document.getElementById(table.id).querySelectorAll('.field-label')[
+      index
+    ].textContent = event.target.value;
+  });
+  fieldNameInput.value = field.name;
+
+  const typeContainer = document.createElement('div');
+  typeContainer.className =
+    'bg-white rounded-sm p-2 col-span-2 border border-neutral-200';
+
+  const typeInput = document.createElement('input');
+  typeInput.className = 'type-input text-neutral-500 w-full';
+  typeInput.value = table.value;
+
+  typeInput.addEventListener('input', (event) => {
+    const tables = JSON.parse(localStorage.getItem('tables'));
+    localStorage.setItem(
+      'tables',
+      JSON.stringify(
+        tables.map((t) => {
+          if (t.id === table.id) {
+            t.fields = t.fields.map((f) => {
+              if (f.id === field.id) {
+                f.value = event.target.value;
+              }
+              return f;
+            });
+          }
+          return t;
+        }),
+      ),
+    );
+    const fieldType = document
+      .getElementById(table.id)
+      .querySelectorAll('.field-value')[index];
+    fieldType.textContent = event.target.value;
+  });
+  typeInput.value = field.value;
+
+  typeContainer.appendChild(typeInput);
+
+  const deleteButton = document.createElement('div');
+  deleteButton.className =
+    'col-span-1 flex items-center justify-center group transition-colors hover:bg-accent border h-full text-neutral-600 rounded-sm bg-neutral-100 border-neutral-200 cursor-pointer';
+
+  const deleteIcon = document.createElement('span');
+  deleteIcon.className =
+    'heroicon heroicon-trash text-xl group-hover:text-white';
+
+  deleteButton.addEventListener('click', () => {
+    row.remove();
+    document
+      .getElementById(table.id)
+      .querySelectorAll('.field-element')
+      [index].remove();
+
+    const tables = JSON.parse(localStorage.getItem('tables'));
+    localStorage.setItem(
+      'tables',
+      JSON.stringify(
+        tables.map((t) => {
+          if (t.id === table.id) {
+            t.fields = t.fields.filter((f) => f.id !== field.id);
+          }
+          return t;
+        }),
+      ),
+    );
+  });
+
+  deleteButton.appendChild(deleteIcon);
+
+  row.appendChild(fieldContainer);
+  row.appendChild(typeContainer);
+  row.appendChild(deleteButton);
+  return row;
+}
+
 export function SidebarTableCard(table) {
   const card = document.createElement('div');
   card.className = ' h-max bg-white mx-2 rounded-lg';
@@ -57,6 +166,24 @@ export function SidebarTableCard(table) {
   const titleInput = document.createElement('input');
   titleInput.className =
     'p-3 w-full text-center text-accent font-medium tracking-wide';
+  titleInput.addEventListener('input', (event) => {
+    const tables = JSON.parse(localStorage.getItem('tables'));
+    localStorage.setItem(
+      'tables',
+      JSON.stringify(
+        tables.map((t) => {
+          if (t.id === table.id) {
+            t.name = event.target.value;
+          }
+          return t;
+        }),
+      ),
+    );
+    const tableHeader = document
+      .getElementById(table.id)
+      .querySelector('.table-header');
+    tableHeader.textContent = event.target.value;
+  });
   titleInput.value = table.name;
 
   header.appendChild(titleInput);
@@ -65,104 +192,9 @@ export function SidebarTableCard(table) {
   content.className =
     'flex flex-col px-2 py-2 gap-y-2 divide-purple-400 text-white rounded';
 
-  table.fields.forEach((field) => {
-    const row = document.createElement('div');
-    row.className = 'grid grid-cols-6 text-sm items-center gap-x-2';
-
-    const fieldContainer = document.createElement('div');
-    fieldContainer.className =
-      'bg-white rounded-sm col-span-3  p-2 border border-neutral-200';
-
-    const fieldNameInput = document.createElement('input');
-    fieldContainer.appendChild(fieldNameInput);
-    fieldNameInput.className = 'type-input text-neutral-500';
-    fieldNameInput.addEventListener('input', (event) => {
-      const tables = JSON.parse(localStorage.getItem('tables'));
-      localStorage.setItem(
-        'tables',
-        JSON.stringify(
-          tables.map((t) => {
-            if (t.id === table.id) {
-              t.fields = t.fields.map((f) => {
-                if (f.id === field.id) {
-                  f.name = event.target.value;
-                }
-                return f;
-              });
-            }
-            return t;
-          }),
-        ),
-      );
-      const fieldLabel = document.getElementById(table.id).querySelector('.field-label');
-      fieldLabel.textContent = event.target.value;
-    });
-    fieldNameInput.value = field.name;
-
-    const typeContainer = document.createElement('div');
-    typeContainer.className =
-      'bg-white rounded-sm p-2 col-span-2 border border-neutral-200';
-
-    const typeInput = document.createElement('input');
-    typeInput.className = 'type-input text-neutral-500 w-full';
-    typeInput.value = table.value;
-
-    typeInput.addEventListener('input', (event) => {
-      const tables = JSON.parse(localStorage.getItem('tables'));
-      localStorage.setItem(
-        'tables',
-        JSON.stringify(
-          tables.map((t) => {
-            if (t.id === table.id) {
-              t.fields = t.fields.map((f) => {
-                if (f.id === field.id) {
-                  f.value = event.target.value;
-                }
-                return f;
-              });
-            }
-            return t;
-          }),
-        ),
-      );
-      const fieldType = document.getElementById(table.id).querySelector('.field-value');
-      fieldType.textContent = event.target.value;
-    });
-    typeInput.value = field.value;
-
-    typeContainer.appendChild(typeInput);
-
-    const deleteButton = document.createElement('div');
-    deleteButton.className =
-      'col-span-1 flex items-center justify-center group transition-colors hover:bg-accent border h-full text-neutral-600 rounded-sm bg-neutral-100 border-neutral-200 cursor-pointer';
-
-    const deleteIcon = document.createElement('span');
-    deleteIcon.className =
-      'heroicon heroicon-trash text-xl group-hover:text-white';
-
-    deleteButton.addEventListener('click', () => {
-      row.remove();
-      const tables = JSON.parse(localStorage.getItem('tables'));
-      localStorage.setItem(
-        'tables',
-        JSON.stringify(
-          tables.map((t) => {
-            if (t.id === table.id) {
-              t.fields = t.fields.filter((f) => f.id !== field.id);
-            }
-            return t;
-          }),
-        ),
-      );
-    });
-
-    deleteButton.appendChild(deleteIcon);
-
-    row.appendChild(fieldContainer);
-    row.appendChild(typeContainer);
-    row.appendChild(deleteButton);
-
-    content.appendChild(row);
+  table.fields.forEach((field, index) => {
+    const newRow = SidebarTableCardRow(table, field, index);
+    content.appendChild(newRow);
   });
   const footer = document.createElement('div');
   footer.className =
@@ -172,7 +204,7 @@ export function SidebarTableCard(table) {
   deleteTableButton.className =
     'text-sm bg-white cursor-pointer hover:bg-neutral-200 border px-2 py-0.5 rounded-md shadow text-neutral-500 border-neutral-300 flex-1';
   deleteTableButton.textContent = 'Delete Table';
-  deleteTableButton.addEventListener('click', () => {
+  deleteTableButton.addEventListener('click', (event) => {
     card.remove();
     document.getElementById(table.id).remove();
     const tables = JSON.parse(localStorage.getItem('tables'));
@@ -187,9 +219,6 @@ export function SidebarTableCard(table) {
     'text-sm bg-accent cursor-pointer hover:bg-purple-700 border px-2 py-0.5 rounded-md shadow text-white border-accent flex-1';
   addFieldButton.textContent = 'Add Field';
   addFieldButton.addEventListener('click', () => {
-    const newRow = row.cloneNode(true);
-    newRow.querySelector('input').value = '';
-    content.appendChild(newRow);
     const tables = JSON.parse(localStorage.getItem('tables'));
     localStorage.setItem(
       'tables',
@@ -197,16 +226,49 @@ export function SidebarTableCard(table) {
         tables.map((t) => {
           if (t.id === table.id) {
             t.fields.push({
-              name: 'new field',
-              value: 'int',
+              id: `field-${t.fields.length}`,
+              name: '',
+              value: 'varchar',
               type: 'Values',
-              id: `field-${table.fields.length}`,
             });
           }
           return t;
         }),
       ),
     );
+    const tableDiv = document.getElementById(table.id);
+    const innerPadding = tableDiv.querySelector('.py-2.flex-1.flex.flex-col');
+
+    const fieldElement = document.createElement('div');
+    fieldElement.className = 'field-element flex items-center px-4 py-2';
+
+    const fieldLabel = document.createElement('span');
+    fieldLabel.className = 'field-label text-neutral-600 flex-1';
+    fieldLabel.textContent = '';
+
+    const fieldValue = document.createElement('span');
+    fieldValue.className = 'field-value text-neutral-600 flex-1 text-right';
+    fieldValue.textContent = 'varchar';
+
+    fieldElement.appendChild(fieldLabel);
+    fieldElement.appendChild(fieldValue);
+    innerPadding.appendChild(fieldElement);
+
+    const newFieldsLength =
+      JSON.parse(localStorage.getItem('tables')).find((t) => t.id === table.id)
+        .fields.length - 1;
+
+    const newRow = SidebarTableCardRow(
+      table,
+      {
+        id: `field-${Math.random().toString(36).slice(2, 9)}`,
+        name: '',
+        value: 'varchar',
+        type: 'Values',
+      },
+      newFieldsLength,
+    );
+    content.appendChild(newRow);
   });
 
   footer.appendChild(deleteTableButton);
