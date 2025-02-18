@@ -2,6 +2,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 input {
@@ -32,5 +35,20 @@ textarea {
   border-radius: 0.4rem;
   outline: none;
   padding: 1rem;
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .canvas {
+    padding: 1rem;
+  }
 }
 

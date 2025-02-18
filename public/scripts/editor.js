@@ -132,8 +132,7 @@ document.addEventListener('pointermove', (e) => {
         translate: { x: draggedTable.x, y: draggedTable.y },
       });
     }
-  }
-  if (e.target.id === 'canvasBG' && isPanning) {
+  } else if (isPanning) {
     const deltaX = e.clientX - panStart.x;
     const deltaY = e.clientY - panStart.y;
     panOffset.x += deltaX;
@@ -147,7 +146,57 @@ document.addEventListener('pointermove', (e) => {
 document.addEventListener('pointerup', (e) => {
   localStorage.setItem('tables', JSON.stringify(tables));
   draggedTable = null;
-  if (e.target.id === 'canvasBG' && isPanning) {
+  if (isPanning) {
+    isPanning = false;
+  }
+});
+
+// Handles touch events for mobile compatibility
+canvas.addEventListener('touchstart', (e) => {
+  if (e.target.id === 'canvasBG') {
+    isPanning = true;
+    const touch = e.touches[0];
+    panStart = { x: touch.clientX, y: touch.clientY };
+  } else if (e.target.closest('.table-header')) {
+    const tableDiv = e.target.closest('.table');
+    draggedTable = tables.find((table) => table.id === tableDiv.id);
+
+    const scale = zoomInput.value / 100;
+    const touch = e.touches[0];
+    draggedTableOffset.x = (touch.clientX - panOffset.x) / scale - draggedTable.x;
+    draggedTableOffset.y = (touch.clientY - panOffset.y) / scale - draggedTable.y;
+  }
+});
+
+canvas.addEventListener('touchmove', (e) => {
+  if (draggedTable) {
+    const scale = zoomInput.value / 100;
+    const touch = e.touches[0];
+    draggedTable.x = (touch.clientX - panOffset.x) / scale - draggedTableOffset.x;
+    draggedTable.y = (touch.clientY - panOffset.y) / scale - draggedTableOffset.y;
+
+    const tableDiv = document.getElementById(draggedTable.id);
+    if (tableDiv) {
+      updateTransform(tableDiv, {
+        translate: { x: draggedTable.x, y: draggedTable.y },
+      });
+    }
+  } else if (isPanning) {
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - panStart.x;
+    const deltaY = touch.clientY - panStart.y;
+    panOffset.x += deltaX;
+    panOffset.y += deltaY;
+
+    updateTransform(canvas, { translate: panOffset });
+    panStart = { x: touch.clientX, y: touch.clientY };
+  }
+});
+
+canvas.addEventListener('touchend', (e) => {
+  if (draggedTable) {
+    draggedTable = null;
+  } else if (isPanning) {
     isPanning = false;
   }
 });

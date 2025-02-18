@@ -18,8 +18,8 @@ sidebarToggle.addEventListener('click', () => {
   const sidebarIcon = sidebarToggle.querySelector('img');
   const sidebar = document.querySelector('aside');
 
-  sidebar.classList.toggle('-translate-x-full');
-  sidebarIcon.style.rotate = sidebar.classList.contains('-translate-x-full')
+  sidebar.classList.toggle('max-md:-translate-x-full');
+  sidebarIcon.style.rotate = sidebar.classList.contains('max-md:-translate-x-full')
     ? '0deg'
     : '180deg';
 });
