@@ -32,27 +32,27 @@ ai.get('/', async (req: Request, res: Response) => {
 });
 
 
-ai.post('prisma', async (req: Request, res: Response) => {
+ai.post('/prisma', async (req: Request, res: Response) => {
   const schema = req.body.schema as string;
 
   const model = gemini.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-1.0-pro',
   });
 
-  const prompt = ` Generate a prisma schema for a database with tables and fields using the following JSON schema: ${JSON.stringify(schema)}`;
+  const prompt = ` Generate a prisma schema for a database with tables and fields using the following JSON schema: ${JSON.stringify(schema)}. the response text should just Prisma schema nothing else.`;
   const response = await model.generateContent(prompt);
 
   res.json(response.response.text());
 });
 
-ai.post('sql', async (req: Request, res: Response) => {
+ai.post('/sql', async (req: Request, res: Response) => {
   const schema = req.body.schema as string;
 
   const model = gemini.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-1.0-pro',
   });
 
-  const prompt = `Generate a SQL Query to create database with tables and fields using the following JSON schema: ${JSON.stringify(schema)}`;
+  const prompt = `Generate a SQL Query to create database with tables and fields using the following JSON schema: ${JSON.stringify(schema)}. the response text should just SQL Query.`;
   const response = await model.generateContent(prompt);
 
   res.json(response.response.text());

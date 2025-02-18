@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config();
+
 export class JSONBin {
   accessKey: string;
   masterKey: string;

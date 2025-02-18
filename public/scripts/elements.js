@@ -280,3 +280,49 @@ export function SidebarTableCard(table) {
 
   return card;
 }
+
+export function showAlert(message) {
+  const alert = document.createElement('div');
+  alert.className = 'max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg fixed bottom-20 right-4 z-50 transition-transform transform translate-x-full';
+  alert.setAttribute('role', 'alert');
+  alert.setAttribute('tabindex', '-1');
+  alert.setAttribute('aria-labelledby', 'hs-toast-stack-toggle-update-label');
+
+  const alertContent = document.createElement('div');
+  alertContent.className = 'flex p-4';
+
+  const iconContainer = document.createElement('div');
+  iconContainer.className = 'shrink-0';
+
+  const icon = document.createElement('img');
+  icon.className = 'shrink-0 size-4 mt-0.5';
+  icon.setAttribute('src', '/assets/success.svg');
+  icon.setAttribute('alt', 'Success Icon');
+
+  const messageContainer = document.createElement('div');
+  messageContainer.className = 'ms-3';
+
+  const messageText = document.createElement('p');
+  messageText.id = 'hs-toast-stack-toggle-update-label';
+  messageText.className = 'text-sm text-gray-700';
+  messageText.textContent = message;
+
+  iconContainer.appendChild(icon);
+  messageContainer.appendChild(messageText);
+  alertContent.appendChild(iconContainer);
+  alertContent.appendChild(messageContainer);
+  alert.appendChild(alertContent);
+
+  document.body.appendChild(alert);
+
+  requestAnimationFrame(() => {
+    alert.classList.remove('translate-x-full');
+  });
+
+  setTimeout(() => {
+    alert.classList.add('translate-x-full');
+    setTimeout(() => {
+      alert.remove();
+    }, 300);
+  }, 3000);
+}

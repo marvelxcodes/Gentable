@@ -1,6 +1,7 @@
 import { CanvasTableCard, SidebarTableCard } from './elements.js';
 import { updateTransform, returnInRange } from './util.js';
 import tablesDefault from './data.js';
+import { getTables } from './share.js';
 /*
     Schema:
 
@@ -25,8 +26,16 @@ import tablesDefault from './data.js';
 */
 
 let tables = [];
-
-if (localStorage.getItem('tables')) {
+const params = new URLSearchParams(location.pathname.search);
+const id = params.get('id');
+if (id) {
+  try {
+    tables = await getTables(id);
+    localStorage.setItem('tables', JSON.stringify(tables));
+  } catch (error) {
+    location.href = '/';
+  }
+} else if (localStorage.getItem('tables')) {
   tables = JSON.parse(localStorage.getItem('tables'));
 } else {
   tables = tablesDefault;
@@ -97,7 +106,7 @@ let panOffset = { x: 0, y: 0 };
 let draggedTableOffset = { x: 0, y: 0 };
 let draggedTable = null;
 
-document.addEventListener('mousedown', (e) => {
+document.addEventListener('pointerdown', (e) => {
   if (e.target.id === 'canvasBG') {
     isPanning = true;
     panStart = { x: e.clientX, y: e.clientY };
@@ -106,12 +115,12 @@ document.addEventListener('mousedown', (e) => {
     draggedTable = tables.find((table) => table.id === tableDiv.id);
 
     const scale = zoomInput.value / 100;
-    draggedTableOffset.x = ((e.clientX - panOffset.x) / scale - draggedTable.x);
-    draggedTableOffset.y = ((e.clientY - panOffset.y) / scale - draggedTable.y);
+    draggedTableOffset.x = (e.clientX - panOffset.x) / scale - draggedTable.x;
+    draggedTableOffset.y = (e.clientY - panOffset.y) / scale - draggedTable.y;
   }
 });
 
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('pointermove', (e) => {
   if (draggedTable) {
     const scale = zoomInput.value / 100;
     draggedTable.x = (e.clientX - panOffset.x) / scale - draggedTableOffset.x;
@@ -135,7 +144,7 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
-document.addEventListener('mouseup', (e) => {
+document.addEventListener('pointerup', (e) => {
   localStorage.setItem('tables', JSON.stringify(tables));
   draggedTable = null;
   if (e.target.id === 'canvasBG' && isPanning) {
@@ -169,8 +178,6 @@ createTableButton.addEventListener('click', () => {
   const canvasTableCard = CanvasTableCard(table);
   canvas.appendChild(canvasTableCard);
 });
-
-
 
 export function addFieldToTable(tableId, field) {
   const table = tables.find((t) => t.id === tableId);

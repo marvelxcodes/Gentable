@@ -33,7 +33,7 @@
     </style>
   </head>
   <body class="flex w-full max-w-[100vw] min-h-screen">
-    <aside class="w-80 flex flex-col h-screen gap-y-6 bg-accent shadow-2xl">
+    <aside class="w-80 max-md:fixed left-0 top-0 flex flex-col h-screen relative z-50 gap-y-6 bg-accent shadow-2xl">
       <div class="flex items-center p-3 gap-x-3">
         <div class="bg-white rounded-xl p-1 w-max">
           <img
@@ -62,17 +62,22 @@
       <!-- Actions -->
       <div class="space-y-3 select-none p-3">
         <button
+          id="copySQLQuery"
           class="inline-flex w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 px-4 bg-white text-slate-900 hover:bg-slate-200"
         >
           Copy SQL Query
           <img class="h-5 w-5" src="./assets/sql.png" alt="" />
         </button>
         <button
+          id="copyPrismaSchema"
           class="inline-flex w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 px-4 bg-white text-slate-900 hover:bg-slate-200"
         >
           Copy Prisma Schema
           <img class="h-5 w-5" src="./assets/prisma.png" alt="" />
         </button>
+      </div>
+      <div id="sidebarToggle" class="md:hidden absolute left-full top-1/2 flex items-center justify-center -translate-y-1/2 w-10 rounded-r-lg shadow border border-l-0 border-neutral-200 h-12 bg-accent">
+        <img class="icon" src="/assets/chevron.svg" height="24" width="24" alt="">
       </div>
     </aside>
     <div
@@ -112,7 +117,7 @@
         </svg>
       </div>
 
-      <div class="fixed top-3 right-3 flex gap-x-3">
+      <div class="fixed top-3 right-3 z-30 flex gap-x-3">
         <button
           id="generateSchema"
           class="inline-flex w-full shadow gap-x-3 h-max border px-8 border-neutral-200 justify-center items-center text-sm rounded-lg font-semibold py-3 bg-white text-slate-900 hover:bg-slate-100"
@@ -121,6 +126,7 @@
           <img class="h-5 w-5" src="./assets/generate.png" alt="" />
         </button>
         <button
+          id="shareSchema"
           class="inline-flex border shadow border-neutral-200 px-8 w-full gap-x-3 justify-center items-center text-sm rounded-lg font-semibold py-3 bg-accent text-white hover:opacity-90"
         >
           <span class="text-nowrap"> Share Schema </span>
