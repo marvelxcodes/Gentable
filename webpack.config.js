@@ -27,10 +27,6 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: 'public', to: 'public' },
-        {
-          from: 'vercel.json',
-          to: 'vercel.json',
-        },
       ],
     }),
   ],
