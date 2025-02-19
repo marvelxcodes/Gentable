@@ -14,7 +14,7 @@ app.use('/api/ai', ai);
 app.use('/api/editor', editor);
 
 // Serve static files (HTML, CSS, JS)
-const BASE_PATH = path.join(__dirname, './public');
+const BASE_PATH = path.join(__dirname, '../public');
 app.use(express.static(BASE_PATH));
 
 app.get('/', (req, res) => {
