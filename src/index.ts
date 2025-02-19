@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 // API Endpoints
-app.use("/api/editor", editor);
-app.use("/api/ai", ai);
+app.use('/api/ai', ai);
+app.use('/api/editor', editor);
 
 // Serve static files (HTML, CSS, JS)
 const BASE_PATH = path.join(__dirname, './public');
@@ -19,6 +19,10 @@ app.use(express.static(BASE_PATH));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(BASE_PATH, 'index.html'));
+});
+
+app.get('/ping', (req, res) => {
+  res.send(`<h1>Pong!</h1>`);
 });
 
 // Handle 404
